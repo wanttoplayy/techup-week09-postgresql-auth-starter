@@ -26,6 +26,7 @@ Bonus missions: view, edit, and delete a post. Edit and delete must be limited t
 - `server/` — Express starter with PostgreSQL, bcrypt, and JWT mission comments
 - `server/db/schema.sql` — database tables and seed posts
 - `server/requests.http` — requests for testing the API
+- `solution/` — completed Full-stack Solution for checking after the workshop
 
 ## 1. Prepare PostgreSQL
 
