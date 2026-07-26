@@ -1,0 +1,71 @@
+@baseUrl = http://localhost:4000
+@token = paste-login-token-here
+@postId = 1
+
+### Health
+GET {{baseUrl}}/health
+
+### Register
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "best",
+  "password": "postgres123",
+  "firstName": "Best",
+  "lastName": "TechUp"
+}
+
+### Login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "best",
+  "password": "postgres123"
+}
+
+### List all posts
+GET {{baseUrl}}/posts
+
+### Filter and search
+GET {{baseUrl}}/posts?status=published&search=postgres
+
+### Create without token: expect 401
+POST {{baseUrl}}/posts
+Content-Type: application/json
+
+{
+  "title": "This request should fail",
+  "content": "The protected route must reject a request without a Bearer token.",
+  "status": "draft"
+}
+
+### Create with token
+POST {{baseUrl}}/posts
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "My first PostgreSQL post",
+  "content": "The author comes from the verified JWT payload instead of the request body.",
+  "status": "published"
+}
+
+### Bonus: view one
+GET {{baseUrl}}/posts/{{postId}}
+
+### Bonus: update owned post
+PUT {{baseUrl}}/posts/{{postId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Updated PostgreSQL post",
+  "content": "Only the authenticated owner can update this post through the protected route.",
+  "status": "published"
+}
+
+### Bonus: delete owned post
+DELETE {{baseUrl}}/posts/{{postId}}
+Authorization: Bearer {{token}}
