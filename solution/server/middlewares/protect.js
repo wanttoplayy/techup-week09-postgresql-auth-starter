@@ -3,29 +3,16 @@ import jwt from "jsonwebtoken";
 export function protect(req, res, next) {
   const authorization = req.headers.authorization;
 
-  if (!authorization || !authorization.startsWith("Bearer ")) {
+  if (!authorization) {
     return res.status(401).json({
-      message: "Token has invalid format",
+      message: "Token is required",
     });
   }
 
-  const parts = authorization.split(" ");
-
-  if (parts.length !== 2 || !parts[1]) {
-    return res.status(401).json({
-      message: "Token has invalid format",
-    });
-  }
-
-  if (!process.env.JWT_SECRET) {
-    console.error("JWT_SECRET is missing");
-    return res.status(500).json({
-      message: "Server authentication is not configured",
-    });
-  }
+  const token = authorization.replace("Bearer ", "");
 
   try {
-    const payload = jwt.verify(parts[1], process.env.JWT_SECRET);
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
 
     req.user = {
       userId: payload.userId,
